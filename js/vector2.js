@@ -14,7 +14,6 @@ class Vector2 {
     scale(c) {
         this.x *= c;
         this.y *= c;
-        this.z *= c;
     }
 
     copy() {
