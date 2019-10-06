@@ -70,7 +70,7 @@ let camera;
 function setup() {
     createCanvas(800, 600);
     camera = new Camera(500, 560,
-        // new Isometric2(20, 600, -5, 5);
+        // new Isometric(20, 600, -5, 5),
         new Perspective(20, 600, -5, 5),
         new CamScreen(0, 0, 300, 200));
     camera.m.rotate(basis.k, radians(180));
