@@ -37,12 +37,22 @@ class Matrix {
         w2.mul_left(w2);
         w.mul_c(Math.sin(theta));
         w2.mul_c(1 - Math.cos(theta));
-        return new Matrix([
+        let r = new Matrix([
             [1 + w[0][0] + w2[0][0], w[0][1] + w2[0][1], w[0][2] + w2[0][2], 0],
             [w[1][0] + w2[1][0], w[1][1] + w2[1][1] + 1, w[1][2] + w2[1][2], 0],
             [w[2][0] + w2[2][0], w[2][1] + w2[2][1], w[2][2] + w2[2][2] + 1, 0],
             [0, 0, 0, 1],
-        ])
+        ]);
+        r = r.mul_left(Matrix.translation(point));
+        r = r.mul_right(Matrix.translation(point.inverted()));
+        return (r);
+    }
+
+    static translation(v) {
+        let r = Matrix.identity(4);
+        r[0][3] = v.x;
+        r[1][3] = v.y;
+        r[2][3] = v.z;
     }
 
     mul_c(c) {

@@ -11,12 +11,24 @@ class Vector2 {
         this.y = y;
     }
 
+    scale(c) {
+        this.x *= c;
+        this.y *= c;
+        this.z *= c;
+    }
+
     copy() {
         return new Vector2(this.x, this.y);
     }
 
     length() {
         return Math.sqrt(this.x * this.x + this.y * this.y)
+    }
+
+    inverted() {
+        let r = this.copy();
+        r.scale(-1);
+        return r;
     }
 
     normalize() {
