@@ -1,13 +1,24 @@
 class Isometric {
-    constructor(n, f, l, r) {
+    constructor(n, f, l, r, t, b) {
         this.n = n;
         this.f = f;
         this.r = r;
         this.l = l;
-        this.m = new Matrix3(
-            2 * n / (r - l), (r + l) / (r - l), 0,
-            0, -(f + n) / (f - n), -2 * f * n / (f - n),
-            0, -1, 0);
+        if (t === undefined)
+            t = l;
+        if (b === undefined)
+            b = r;
+        this.t = t;
+        this.b = b;
+        // this.m = new Matrix3(
+        //     2 * n / (r - l), (r + l) / (r - l), 0,
+        //     0, -(f + n) / (f - n), -2 * f * n / (f - n),
+        //     0, -1, 0);
+        this.m = new Matrix([
+            [2 * n / (r - l), 0, (r + l) / (r - l), 0],
+            [0, 2 * n / (t - b), (t + b) / (t - b), 0],
+            [0, 0, -(f + n) / (f - n), -2 * f * n / (f - n)],
+            [0, 0, -1, 0]]);
     }
 
     proj_vertex(v) {
@@ -30,7 +41,7 @@ class Camera {
     constructor(x, y) {
         this.m = Matrix.identity(4);
         // this.projection = new Isometric(20, 600, -5, 5);
-        // this.projection = new Perspective(20, 600, -5, 5);
+        this.projection = new Perspective(20, 600, -5, 5);
         this.m.translate(new Vector3(x, y, 0));
         this.m_inv = this.m.inverted();
     }

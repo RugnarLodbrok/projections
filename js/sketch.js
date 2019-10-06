@@ -81,9 +81,8 @@ function draw() {
             camera.update_inv();
         }
     background(220);
-    // mesh.m.rotate(radians(1), new Vector2(325, 225));
     mesh.m.rotate(basis.k, radians(1));
     mesh.draw();
     camera.draw();
-    // camera.draw_projection(mesh);
+    camera.draw_projection(mesh);
 }
