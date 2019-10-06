@@ -1,4 +1,3 @@
-
 class Isometric {
     constructor(n, f, l, r) {
         this.n = n;
@@ -12,8 +11,9 @@ class Isometric {
     }
 
     proj_vertex(v) {
-        v.transform(this.m); //from world coords to eye coords
-        v.x = v.x * this.n * this.n / ((this.r - this.l) * this.f);
+        // v.transform(this.m); //from world coords to eye coords
+        // v.x = v.x * this.n * this.n / ((this.r - this.l) * this.f);
+        // v.x = v.x * (this.r - this.l) / this.f;
         v.y = 0;
     }
 }
@@ -29,8 +29,8 @@ class Perspective extends Isometric {
 class Camera {
     constructor(x, y) {
         this.m = Matrix.identity();
-        this.perspective = new Isometric(20, 600, -5, 5);
-        // this.perspective = new Perspective(20, 600, -5, 5);
+        this.projection = new Isometric(20, 600, -5, 5);
+        // this.projection = new Perspective(20, 600, -5, 5);
         this.m.move(new Vector(x, y));
         this.m_inv = this.m.inverse();
     }
@@ -75,7 +75,7 @@ class Camera {
     draw_projection_vertex(v) {
         let p = v.copy();
         p.transform(this.m_inv); // now we have p relative to the screen, in other words p contains screen coordinates
-        this.perspective.proj_vertex(p);
+        this.projection.proj_vertex(p);
         p.transform(this.m); // draw projected vertices on the screen
         line(v.x, v.y, p.x, p.y);
     }
