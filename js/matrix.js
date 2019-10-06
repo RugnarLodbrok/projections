@@ -61,6 +61,12 @@ class Matrix {
         this.data[2][3] += v.z;
     }
 
+    set_translate(v) {
+        this.data[0][3] = v.x;
+        this.data[1][3] = v.y;
+        this.data[2][3] = v.z;
+    }
+
     static translation(v) {
         let r = Matrix.identity(4);
         r.data[0][3] = v.x;
@@ -93,5 +99,16 @@ class Matrix {
 
     mul_right(other) {
         return other.mul_left(this);
+    }
+
+    repr() {
+        let r = "Matrix [";
+        for (let i = 0; i < this.rank; ++i) {
+            r += "\n";
+            for (let j = 0; j < this.rank; ++j) {
+                r += Math.round(this.data[i][j] * 100) / 100 + " ";
+            }
+        }
+        return r;
     }
 }

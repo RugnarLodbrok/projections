@@ -25,7 +25,7 @@ class Matrix3 {
             0, 0, 1);
     }
 
-    inverse() {
+    inverted() {
         let m = matrix_invert([
             [this.x1, this.x2, this.x3],
             [this.y1, this.y2, this.y3],

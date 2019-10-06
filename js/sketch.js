@@ -41,53 +41,49 @@ let camera;
 
 function setup() {
     createCanvas(600, 400);
-    // camera = new Camera(300, 360);
-    // camera.m.rotate_rel(radians(180));
-    // camera.update_inv();
+    camera = new Camera(300, 360);
+    camera.m.rotate(basis.k, radians(180));
+    camera.update_inv();
     mesh = Mesh.square(300, 200, 25);
 }
 
 function draw() {
-    /*    if (keyIsDown(W)) {
-            let v = new Vector2(0, 1);
+        if (keyIsDown(W)) {
+            let v = new Vector3(0, 1);
             v.transform(camera.m);
-            camera.m.x3 = v.x;
-            camera.m.y3 = v.y;
+            camera.m.set_translate(v);
             camera.update_inv();
         }
         if (keyIsDown(S)) {
-            let v = new Vector2(0, -1);
+            let v = new Vector3(0, -1);
             v.transform(camera.m);
-            camera.m.x3 = v.x;
-            camera.m.y3 = v.y;
+            camera.m.set_translate(v);
             camera.update_inv();
         }
         if (keyIsDown(A)) {
-            let v = new Vector2(1, 0);
+            let v = new Vector3(1, 0);
             v.transform(camera.m);
-            camera.m.x3 = v.x;
-            camera.m.y3 = v.y;
+            camera.m.set_translate(v);
             camera.update_inv();
         }
         if (keyIsDown(D)) {
-            let v = new Vector2(-1, 0);
+            let v = new Vector3(-1, 0);
             v.transform(camera.m);
-            camera.m.x3 = v.x;
-            camera.m.y3 = v.y;
+            camera.m.set_translate(v);
             camera.update_inv();
         }
         if (keyIsDown(Q)) {
-            camera.m.rotate_rel(radians(1));
+            camera.m.rotate(basis.k, radians(-1));
             camera.update_inv();
         }
         if (keyIsDown(E)) {
-            camera.m.rotate_rel(radians(-1));
+            camera.m.rotate(basis.k, radians(1));
             camera.update_inv();
-        }*/
+        }
     background(220);
     // mesh.m.rotate(radians(1), new Vector2(325, 225));
-    mesh.m.rotate(new Vector3(0, 0, 1), radians(1));
+    mesh.m.rotate(basis.k, radians(1));
     mesh.draw();
-    // camera.draw();
+    camera.draw();
     // camera.draw_projection(mesh);
 }

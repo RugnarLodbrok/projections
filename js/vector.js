@@ -1,5 +1,7 @@
 class Vector3 {
     constructor(x, y, z) {
+        if (z === undefined)
+            z = 0;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -49,3 +51,9 @@ class Vector3 {
         }
     }
 }
+
+let basis = {
+    i: new Vector3(1, 0, 0),
+    j: new Vector3(0, 1, 0),
+    k: new Vector3(0, 0, 1),
+};
