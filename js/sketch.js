@@ -1,9 +1,9 @@
 class Mesh {
     constructor(x, y) {
-        this.m = Matrix.identity();
+        this.m = Matrix3.identity();
         this.vertices = [];
         this.edges = [];
-        this.m.move(new Vector(x, y));
+        this.m.move(new Vector2(x, y));
     }
 
     add_edge(i, j) {
@@ -32,10 +32,10 @@ function setup() {
     camera.m.rotate_rel(radians(180));
     camera.update_inv();
     mesh = new Mesh(300, 200);
-    mesh.vertices.push(new Vector(0, 0));
-    mesh.vertices.push(new Vector(50, 0));
-    mesh.vertices.push(new Vector(50, 50));
-    mesh.vertices.push(new Vector(0, 50));
+    mesh.vertices.push(new Vector2(0, 0));
+    mesh.vertices.push(new Vector2(50, 0));
+    mesh.vertices.push(new Vector2(50, 50));
+    mesh.vertices.push(new Vector2(0, 50));
     mesh.add_edge(0, 1);
     mesh.add_edge(1, 2);
     mesh.add_edge(2, 3);
@@ -44,28 +44,28 @@ function setup() {
 
 function draw() {
     if (keyIsDown(W)) {
-        let v = new Vector(0, 1);
+        let v = new Vector2(0, 1);
         v.transform(camera.m);
         camera.m.x3 = v.x;
         camera.m.y3 = v.y;
         camera.update_inv();
     }
     if (keyIsDown(S)) {
-        let v = new Vector(0, -1);
+        let v = new Vector2(0, -1);
         v.transform(camera.m);
         camera.m.x3 = v.x;
         camera.m.y3 = v.y;
         camera.update_inv();
     }
     if (keyIsDown(A)) {
-        let v = new Vector(1, 0);
+        let v = new Vector2(1, 0);
         v.transform(camera.m);
         camera.m.x3 = v.x;
         camera.m.y3 = v.y;
         camera.update_inv();
     }
     if (keyIsDown(D)) {
-        let v = new Vector(-1, 0);
+        let v = new Vector2(-1, 0);
         v.transform(camera.m);
         camera.m.x3 = v.x;
         camera.m.y3 = v.y;
@@ -80,7 +80,7 @@ function draw() {
         camera.update_inv();
     }
     background(220);
-    mesh.m.rotate(radians(1), new Vector(325, 225));
+    mesh.m.rotate(radians(1), new Vector2(325, 225));
     mesh.draw();
     camera.draw();
     camera.draw_projection(mesh);

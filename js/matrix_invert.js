@@ -23,7 +23,7 @@ function matrix_invert(M) {
         for (j = 0; j < dim; j += 1) {
 
             //if we're on the diagonal, put a 1 (for identity)
-            if (i == j) {
+            if (i === j) {
                 I[i][j] = 1;
             } else {
                 I[i][j] = 0;
@@ -40,11 +40,11 @@ function matrix_invert(M) {
         e = C[i][i];
 
         // if we have a 0 on the diagonal (we'll need to swap with a lower row)
-        if (e == 0) {
+        if (e === 0) {
             //look through every row below the i'th row
             for (ii = i + 1; ii < dim; ii += 1) {
                 //if the ii'th row has a non-0 in the i'th col
-                if (C[ii][i] != 0) {
+                if (C[ii][i] !== 0) {
                     //it would make the diagonal have a non-0 so swap it
                     for (j = 0; j < dim; j++) {
                         e = C[i][j];       //temp store i'th row
@@ -61,7 +61,7 @@ function matrix_invert(M) {
             //get the new diagonal
             e = C[i][i];
             //if it's still 0, not invertable (error)
-            if (e == 0) {
+            if (e === 0) {
                 return
             }
         }
@@ -77,7 +77,7 @@ function matrix_invert(M) {
         // rows above and below this one
         for (ii = 0; ii < dim; ii++) {
             // Only apply to other rows (we want a 1 on the diagonal)
-            if (ii == i) {
+            if (ii === i) {
                 continue;
             }
 

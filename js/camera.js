@@ -4,7 +4,7 @@ class Isometric {
         this.f = f;
         this.r = r;
         this.l = l;
-        this.m = new Matrix(
+        this.m = new Matrix3(
             2 * n / (r - l), (r + l) / (r - l), 0,
             0, -(f + n) / (f - n), -2 * f * n / (f - n),
             0, -1, 0);
@@ -28,10 +28,10 @@ class Perspective extends Isometric {
 
 class Camera {
     constructor(x, y) {
-        this.m = Matrix.identity();
+        this.m = Matrix3.identity();
         this.projection = new Isometric(20, 600, -5, 5);
         // this.projection = new Perspective(20, 600, -5, 5);
-        this.m.move(new Vector(x, y));
+        this.m.move(new Vector2(x, y));
         this.m_inv = this.m.inverse();
     }
 
@@ -42,18 +42,18 @@ class Camera {
     draw() {
         strokeWeight(.5);
         stroke(200, 0, 0);
-        let p1 = new Vector(-100, 0);
-        let p2 = new Vector(100, 0);
+        let p1 = new Vector2(-100, 0);
+        let p2 = new Vector2(100, 0);
         p1.transform(this.m);
         p2.transform(this.m);
         line(p1.x, p1.y, p2.x, p2.y);
-        p1 = new Vector(-30, 0);
-        p2 = new Vector(-30, 5);
+        p1 = new Vector2(-30, 0);
+        p2 = new Vector2(-30, 5);
         p1.transform(this.m);
         p2.transform(this.m);
         line(p1.x, p1.y, p2.x, p2.y);
-        p1 = new Vector(30, 0);
-        p2 = new Vector(30, 5);
+        p1 = new Vector2(30, 0);
+        p2 = new Vector2(30, 5);
         p1.transform(this.m);
         p2.transform(this.m);
         line(p1.x, p1.y, p2.x, p2.y);
