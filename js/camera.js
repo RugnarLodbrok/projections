@@ -49,7 +49,7 @@ class Camera {
         drawingContext.setLineDash([]);
     }
 
-    draw_on_screen() {
+    draw_on_screen(mesh) {
         let s = this.screen;
         s.draw();
         strokeWeight(1);
