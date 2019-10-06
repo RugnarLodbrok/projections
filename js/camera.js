@@ -14,18 +14,18 @@ class Camera {
     draw() {
         strokeWeight(.5);
         stroke(200, 0, 0);
-        let p1 = new Vector3(-100, 0);
-        let p2 = new Vector3(100, 0);
+        let p1 = new Vector3(-150, 0);
+        let p2 = new Vector3(150, 0);
         p1.transform(this.m);
         p2.transform(this.m);
         line(p1.x, p1.y, p2.x, p2.y);
-        p1 = new Vector3(-30, 0);
-        p2 = new Vector3(-30, 5);
+        p1 = new Vector3(-150, 0);
+        p2 = new Vector3(-150, 5);
         p1.transform(this.m);
         p2.transform(this.m);
         line(p1.x, p1.y, p2.x, p2.y);
-        p1 = new Vector3(30, 0);
-        p2 = new Vector3(30, 5);
+        p1 = new Vector3(150, 0);
+        p2 = new Vector3(150, 5);
         p1.transform(this.m);
         p2.transform(this.m);
         line(p1.x, p1.y, p2.x, p2.y);
