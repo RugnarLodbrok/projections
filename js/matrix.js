@@ -112,3 +112,21 @@ class Matrix {
         return r;
     }
 }
+
+let basis_rotate_cw = new Matrix([
+    [0, 0, 1, 0],
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 0, 1]]);
+
+let basis_rotate_ccw = new Matrix([
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [1, 0, 0, 0],
+    [0, 0, 0, 1]]);
+
+let basis_swap_yz = new Matrix([
+    [-1, 0, 0, 0],
+    [0, 0, 1, 0],
+    [0, 1, 0, 0],
+    [0, 0, 0, 1]]);

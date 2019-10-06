@@ -19,6 +19,34 @@ class Mesh {
         return mesh;
     }
 
+    static cube(x, y, size) {
+        let mesh = new Mesh(x, y);
+        mesh.vertices.push(new Vector3(-size, -size, -size));
+        mesh.vertices.push(new Vector3(size, -size, -size));
+        mesh.vertices.push(new Vector3(size, size, -size));
+        mesh.vertices.push(new Vector3(-size, size, -size));
+        mesh.vertices.push(new Vector3(-size, -size, size));
+        mesh.vertices.push(new Vector3(size, -size, size));
+        mesh.vertices.push(new Vector3(size, size, size));
+        mesh.vertices.push(new Vector3(-size, size, size));
+        mesh.add_edge(0, 1);
+        mesh.add_edge(1, 2);
+        mesh.add_edge(2, 3);
+        mesh.add_edge(3, 0);
+
+        mesh.add_edge(4, 5);
+        mesh.add_edge(5, 6);
+        mesh.add_edge(6, 7);
+        mesh.add_edge(7, 4);
+
+        mesh.add_edge(0, 4);
+        mesh.add_edge(1, 5);
+        mesh.add_edge(2, 6);
+        mesh.add_edge(3, 7);
+
+        return mesh;
+    }
+
     add_edge(i, j) {
         this.edges.push([i, j]);
     }
@@ -40,49 +68,53 @@ let mesh;
 let camera;
 
 function setup() {
-    createCanvas(600, 400);
-    camera = new Camera(300, 360);
+    createCanvas(800, 600);
+    camera = new Camera(500, 560,
+        // new Isometric2(20, 600, -5, 5);
+        new Perspective(20, 600, -5, 5),
+        new CamScreen(0, 0, 300, 200));
     camera.m.rotate(basis.k, radians(180));
     camera.update_inv();
-    mesh = Mesh.square(300, 200, 25);
+    mesh = Mesh.cube(500, 400, 25);
 }
 
 function draw() {
-        if (keyIsDown(W)) {
-            let v = new Vector3(0, 1);
-            v.transform(camera.m);
-            camera.m.set_translate(v);
-            camera.update_inv();
-        }
-        if (keyIsDown(S)) {
-            let v = new Vector3(0, -1);
-            v.transform(camera.m);
-            camera.m.set_translate(v);
-            camera.update_inv();
-        }
-        if (keyIsDown(A)) {
-            let v = new Vector3(1, 0);
-            v.transform(camera.m);
-            camera.m.set_translate(v);
-            camera.update_inv();
-        }
-        if (keyIsDown(D)) {
-            let v = new Vector3(-1, 0);
-            v.transform(camera.m);
-            camera.m.set_translate(v);
-            camera.update_inv();
-        }
-        if (keyIsDown(Q)) {
-            camera.m.rotate(basis.k, radians(-1));
-            camera.update_inv();
-        }
-        if (keyIsDown(E)) {
-            camera.m.rotate(basis.k, radians(1));
-            camera.update_inv();
-        }
+    if (keyIsDown(W)) {
+        let v = new Vector3(0, 1);
+        v.transform(camera.m);
+        camera.m.set_translate(v);
+        camera.update_inv();
+    }
+    if (keyIsDown(S)) {
+        let v = new Vector3(0, -1);
+        v.transform(camera.m);
+        camera.m.set_translate(v);
+        camera.update_inv();
+    }
+    if (keyIsDown(A)) {
+        let v = new Vector3(1, 0);
+        v.transform(camera.m);
+        camera.m.set_translate(v);
+        camera.update_inv();
+    }
+    if (keyIsDown(D)) {
+        let v = new Vector3(-1, 0);
+        v.transform(camera.m);
+        camera.m.set_translate(v);
+        camera.update_inv();
+    }
+    if (keyIsDown(Q)) {
+        camera.m.rotate(basis.k, radians(-1));
+        camera.update_inv();
+    }
+    if (keyIsDown(E)) {
+        camera.m.rotate(basis.k, radians(1));
+        camera.update_inv();
+    }
     background(220);
     mesh.m.rotate(basis.k, radians(1));
     mesh.draw();
     camera.draw();
     camera.draw_projection(mesh);
+    camera.draw_on_screen(mesh);
 }
