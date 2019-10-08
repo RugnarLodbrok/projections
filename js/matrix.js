@@ -213,7 +213,7 @@ function mat_mul() {
     let len = arguments.length;
     if (len < 2)
         throw "mat_mul takes at least 2 args";
-    r = arguments[len - 1];
+    let r = arguments[len - 1];
     for (let i = len - 2; i >= 0; --i)
         r = r.mul_left(arguments[i]);
     return r;

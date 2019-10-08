@@ -9,13 +9,25 @@ class Vector3 {
 
     transform(m) {
         m = m.data;
-        let x = m[0][0] * this.x + m[0][1] * this.y + m[0][2] * this.z + m[0][3];
-        let y = m[1][0] * this.x + m[1][1] * this.y + m[1][2] * this.z + m[1][3];
-        let z = m[2][0] * this.x + m[2][1] * this.y + m[2][2] * this.z + m[2][3];
+        let x = this.x;
+        let y = this.y;
+        let z = this.z;
 
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.x = m[0][0] * x + m[0][1] * y + m[0][2] * z + m[0][3];
+        this.y = m[1][0] * x + m[1][1] * y + m[1][2] * z + m[1][3];
+        this.z = m[2][0] * x + m[2][1] * y + m[2][2] * z + m[2][3];
+    }
+
+    transform4(m) {
+        m = m.data;
+        let x = this.x;
+        let y = this.y;
+        let z = this.z;
+
+        let w = m[3][0] * x + m[3][1] * y + m[3][2] * z + m[3][3];
+        this.x = (m[0][0] * x + m[0][1] * y + m[0][2] * z + m[0][3]) / w;
+        this.y = (m[1][0] * x + m[1][1] * y + m[1][2] * z + m[1][3]) / w;
+        this.z = (m[2][0] * x + m[2][1] * y + m[2][2] * z + m[2][3]) / w;
     }
 
     transformed(m) {

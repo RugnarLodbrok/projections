@@ -69,11 +69,16 @@ let camera;
 
 function p5_func(sketch) {
     sketch.setup = () => {
+        const screen_w = 300;
+        const aspect = 1.5;
+        const near_plane = 1;
+        const fov = 80;
+        let w = 2 * near_plane * Math.tan(radians(fov / 2));
         sketch.createCanvas(800, 600);
         camera = new Camera(500, 560,
             // new Isometric(),
-            new Perspective(1, 2, 4 / 3, 600),
-            new CamScreen(0, 0, 300, 200));
+            new Perspective(near_plane, w, w / aspect, 600),
+            new CamScreen(0, 0, screen_w, screen_w / aspect));
         camera.m.rotate(basis.k, radians(180));
         camera.update_inv();
         mesh = Mesh.cube(500, 400, 25);
@@ -111,12 +116,12 @@ function p5_func(sketch) {
             camera.m.rotate(basis.k, radians(1));
             camera.update_inv();
         }
+        mesh.m.rotate(basis.k, radians(1));
         sketch.background(220);
         sketch.fill(0);
         sketch.stroke(0);
         sketch.textSize(24);
         sketch.text("controls: W A S D Q E", 35, 235);
-        mesh.m.rotate(basis.k, radians(1));
         mesh.draw(sketch);
         camera.draw(sketch);
         camera.draw_projection(sketch, mesh);

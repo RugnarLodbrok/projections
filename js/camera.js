@@ -41,7 +41,7 @@ class Camera {
             let p = v.transformed(this.m_inv); // now we have p relative to the screen, in other words p contains screen coordinates
             p.transform(basis_swap_yz);
             this.projection.proj_vertex(p); // project along z
-            p.x *= -this.screen.w;
+            p.x *= this.screen.w;
             p.transform(basis_swap_yz);
             p.transform(this.m); // draw projected vertices on the screen
             sketch.line(v.x, v.y, p.x, p.y);

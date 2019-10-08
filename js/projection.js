@@ -31,19 +31,21 @@ class Perspective extends Isometric {
     }
 
     proj_vertex(v) {
-        const SIMPLE = 1; // expand matrix transformation and remove non-significant stuff
         if (SIMPLE) {
             let n = this.n;
+            let f = this.f;
             let w = this.r - this.l;
             let h = this.t - this.b;
-            let c = 2 * n * n / (v.z * -2 * n);
+            let c = 2 * n * (f - n) / (v.z * (f + n) - 2 * n * f);
             v.x *= c / w;
             v.y *= c / h;
         } else {
-            v.transform(this.m); //from world coords to eye coords
-            v.x = -this.n * v.x / v.z;
-            v.y = -this.n * v.y / v.z;
+            v.transform4(this.m); //from world coords to eye coords
+            v.x *= -1;
+            v.y *= -1;
         }
         v.z = 0;
     }
 }
+
+const SIMPLE = 1; // do projection matrix transformation manually
