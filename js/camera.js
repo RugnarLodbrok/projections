@@ -54,16 +54,12 @@ class Camera {
         s.draw();
         strokeWeight(1);
         stroke(0, 200, 0);
+        // let m = basis_swap_yz.mul_left(this.m_inv).mul_left(mesh.m);
+        let m = basis_swap_yz.mul_right(this.m_inv).mul_right(mesh.m);
         for (let edge of mesh.edges) {
-            let v1 = mesh.vertices[edge[0]].copy();
-            let v2 = mesh.vertices[edge[1]].copy();
-            v1.transform(mesh.m);
-            v1.transform(this.m_inv);
-            v1.transform(basis_swap_yz); // turn y to z
+            let v1 = mesh.vertices[edge[0]].transformed(m);
+            let v2 = mesh.vertices[edge[1]].transformed(m);
             this.projection.proj_vertex(v1);
-            v2.transform(mesh.m);
-            v2.transform(this.m_inv);
-            v2.transform(basis_swap_yz);
             this.projection.proj_vertex(v2);
             s.line(v1, v2);
         }

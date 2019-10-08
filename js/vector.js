@@ -18,6 +18,12 @@ class Vector3 {
         this.z = z;
     }
 
+    transformed(m){
+        let r = this.copy();
+        r.transform(m);
+        return r;
+    }
+
     scale(c) {
         this.x *= c;
         this.y *= c;
