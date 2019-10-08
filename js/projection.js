@@ -1,5 +1,12 @@
 class Isometric {
+    proj_vertex(v) {
+        v.z = 0;
+    }
+}
+
+class Perspective extends Isometric {
     constructor(n, f, l, r, t, b) {
+        super();
         this.n = n;
         this.f = f;
         this.r = r;
@@ -17,12 +24,6 @@ class Isometric {
             [0, 0, -1, 0]]);
     }
 
-    proj_vertex(v) {
-        v.z = 0;
-    }
-}
-
-class Perspective extends Isometric {
     proj_vertex(v) {
         v.transform(this.m); //from world coords to eye coords
         v.x = -this.n * v.x / v.z;
