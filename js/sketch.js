@@ -112,6 +112,10 @@ function draw() {
         camera.update_inv();
     }
     background(220);
+    fill(0);
+    stroke(0);
+    textSize(24);
+    text("controls: W A S D Q E", 35, 235);
     mesh.m.rotate(basis.k, radians(1));
     mesh.draw();
     camera.draw();
