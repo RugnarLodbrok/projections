@@ -8,8 +8,8 @@ class Matrix {
     }
 
     copy() {
+        const rank = this.rank;
         let r = new Matrix([]);
-        let rank = this.rank;
         r.rank = rank;
         let src = this.data;
         r.data = new Array(rank);
@@ -38,16 +38,19 @@ class Matrix {
 
     inverted() {
         const epsilon = .01;
+        const rank = this.rank;
+        let i;
+        let j;
+
         let r = Matrix.identity(this.rank);
         let M = this.copy().data;
         let I = r.data;
-        // Guassian Elimination
+
+        // Gaussian Elimination
         // (1) 'augment' the matrix (left) by the identity (on the right)
         // (2) Turn the matrix on the left into the identity by elemetry row ops
         // (3) The matrix on the right is the inverse (was the identity matrix)
-        let i;
-        let j;
-        let rank = this.rank;
+
         let swap_rows = (i, j) => {
             let tmp = M[i];
             M[i] = M[j];
@@ -62,13 +65,12 @@ class Matrix {
                 I[i][j] /= c;
             }
         };
-        let sub_row = (i, k, c) => { //M[i] -= M[k]*c
+        let sub_row = (i, k, c) => {
             for (j = 0; j < rank; ++j) {
                 M[i][j] -= M[k][j] * c;
                 I[i][j] -= I[k][j] * c;
             }
         };
-
 
         for (let m = 0; m < rank; ++m) {
             if (Math.abs(M[m][m]) < epsilon) {
@@ -79,7 +81,7 @@ class Matrix {
                     }
                 }
                 if (i < 0)
-                    throw "invert matrix error"
+                    throw "invert matrix error";
             }
             div_row(m, M[m][m]);
             for (i = m + 1; i < rank; ++i) {
