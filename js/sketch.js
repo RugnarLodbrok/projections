@@ -76,7 +76,7 @@ function p5_func(sketch) {
         let w = 2 * near_plane * Math.tan(radians(fov / 2));
         sketch.createCanvas(800, 600);
         camera = new Camera(500, 560,
-            // new Isometric(),
+            // new Isometric(250, 250/aspect),
             new Perspective(near_plane, w, w / aspect, 600),
             new CamScreen(0, 0, screen_w, screen_w / aspect));
         camera.m.rotate(basis.k, radians(180));

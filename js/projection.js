@@ -1,5 +1,12 @@
 class Isometric {
+    constructor(w, h) {
+        this.w = w;
+        this.h = h;
+    }
+
     proj_vertex(v) {
+        v.x /= this.w/2;
+        v.y /= this.h/2;
         v.z = 0;
     }
 }
