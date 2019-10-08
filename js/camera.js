@@ -36,10 +36,8 @@ class Camera {
         strokeWeight(.3);
         stroke(0, 0, 200);
         for (let v of mesh.vertices) {
-            v = v.copy();
-            v.transform(mesh.m);
-            let p = v.copy();
-            p.transform(this.m_inv); // now we have p relative to the screen, in other words p contains screen coordinates
+            v = v.transformed(mesh.m);
+            let p = v.transformed(this.m_inv); // now we have p relative to the screen, in other words p contains screen coordinates
             p.transform(basis_rotate_cw); // turn y to z
             this.projection.proj_vertex(p); // project along z
             p.transform(basis_rotate_ccw); // turn z to y
@@ -54,8 +52,7 @@ class Camera {
         s.draw();
         strokeWeight(1);
         stroke(0, 200, 0);
-        // let m = basis_swap_yz.mul_left(this.m_inv).mul_left(mesh.m);
-        let m = basis_swap_yz.mul_right(this.m_inv).mul_right(mesh.m);
+        let m = mat_mul(basis_swap_yz, this.m_inv, mesh.m);
         for (let edge of mesh.edges) {
             let v1 = mesh.vertices[edge[0]].transformed(m);
             let v2 = mesh.vertices[edge[1]].transformed(m);

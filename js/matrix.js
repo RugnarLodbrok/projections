@@ -159,14 +159,15 @@ class Matrix {
     }
 
     mul_left(other) {
-        let r = Matrix.identity(this.rank);
+        const rank = this.rank;
+        let r = Matrix.identity(rank);
         let m = r.data;
         let b = this.data;
         let a = other.data;
-        for (let i = 0; i < this.rank; ++i) {
-            for (let j = 0; j < this.rank; ++j) {
+        for (let i = 0; i < rank; ++i) {
+            for (let j = 0; j < rank; ++j) {
                 m[i][j] = 0;
-                for (let k = 0; k < this.rank; k++) {
+                for (let k = 0; k < rank; k++) {
                     m[i][j] += a[i][k] * b[k][j];
                 }
             }
@@ -207,3 +208,13 @@ let basis_swap_yz = new Matrix([
     [0, 0, 1, 0],
     [0, 1, 0, 0],
     [0, 0, 0, 1]]);
+
+function mat_mul() {
+    let len = arguments.length;
+    if (len < 2)
+        throw "mat_mul takes at least 2 args";
+    r = arguments[len - 1];
+    for (let i = len - 2; i >= 0; --i)
+        r = r.mul_left(arguments[i]);
+    return r;
+}

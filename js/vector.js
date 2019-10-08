@@ -18,7 +18,7 @@ class Vector3 {
         this.z = z;
     }
 
-    transformed(m){
+    transformed(m) {
         let r = this.copy();
         r.transform(m);
         return r;
@@ -55,6 +55,10 @@ class Vector3 {
             this.y = 0;
             this.z = 1;
         }
+    }
+
+    repr() {
+        return "Vector<" + this.x + ';' + this.y + ';' + this.z + ">"
     }
 }
 
