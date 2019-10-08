@@ -7,21 +7,96 @@ class Matrix {
         this.rank = data.length;
     }
 
+    copy() {
+        let r = new Matrix([]);
+        let rank = this.rank;
+        r.rank = rank;
+        let src = this.data;
+        r.data = new Array(rank);
+        let dst = r.data;
+        for (let i = 0; i < rank; ++i) {
+            dst[i] = new Array(rank);
+            for (let j = 0; j < rank; ++j)
+                dst[i][j] = src[i][j];
+        }
+        return r;
+    }
+
     static identity(rank) {
         let m = new Matrix([]);
-        m.data = Array(rank);
+        let data = Array(rank);
+        m.data = data;
         for (let i = 0; i < rank; ++i) {
-            m.data[i] = Array(rank).fill(0);
-            m.data[i][i] = 1;
+            data[i] = new Array(rank);
+            for (let j = 0; j < rank; ++j)
+                data[i][j] = 0;
+            data[i][i] = 1;
         }
         m.rank = rank;
         return m;
     }
 
     inverted() {
-        let r = new Matrix([]);
-        r.rank = this.rank;
-        r.data = matrix_invert(this.data);
+        const epsilon = .01;
+        let r = Matrix.identity(this.rank);
+        let M = this.copy().data;
+        let I = r.data;
+        // Guassian Elimination
+        // (1) 'augment' the matrix (left) by the identity (on the right)
+        // (2) Turn the matrix on the left into the identity by elemetry row ops
+        // (3) The matrix on the right is the inverse (was the identity matrix)
+        let i;
+        let j;
+        let rank = this.rank;
+        let swap_rows = (i, j) => {
+            let tmp = M[i];
+            M[i] = M[j];
+            M[j] = tmp;
+            tmp = I[i];
+            I[i] = I[j];
+            I[j] = tmp;
+        };
+        let div_row = (i, c) => {
+            for (j = 0; j < rank; ++j) {
+                M[i][j] /= c;
+                I[i][j] /= c;
+            }
+        };
+        let sub_row = (i, k, c) => { //M[i] -= M[k]*c
+            for (j = 0; j < rank; ++j) {
+                M[i][j] -= M[k][j] * c;
+                I[i][j] -= I[k][j] * c;
+            }
+        };
+
+
+        for (let m = 0; m < rank; ++m) {
+            if (Math.abs(M[m][m]) < epsilon) {
+                for (i = m + 1; i < rank; ++i) {
+                    if (Math.abs(M[i][m]) > epsilon) {
+                        swap_rows(m, i);
+                        break;
+                    }
+                }
+                if (i < 0)
+                    throw "invert matrix error"
+            }
+            div_row(m, M[m][m]);
+            for (i = m + 1; i < rank; ++i) {
+                if (M[i][m] !== 0) {
+                    sub_row(i, m, M[i][m] / M[m][m])
+                }
+            }
+        }
+        // at this point M is triangle matrix
+        for (let m = rank - 1; m >= 0; --m) {
+            div_row(m, M[m][m]);
+            for (i = 0; i < m; ++i) {
+                if (M[i][m] !== 0) {
+                    sub_row(i, m, M[i][m] / M[m][m])
+                }
+            }
+        }
         return r;
     }
 
@@ -106,7 +181,7 @@ class Matrix {
         for (let i = 0; i < this.rank; ++i) {
             r += "\n";
             for (let j = 0; j < this.rank; ++j) {
-                r += Math.round(this.data[i][j] * 100) / 100 + " ";
+                r += Math.round(this.data[i][j] * 100) / 100 + "\t";
             }
         }
         return r;
