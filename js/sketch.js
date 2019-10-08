@@ -71,7 +71,7 @@ function setup() {
     createCanvas(800, 600);
     camera = new Camera(500, 560,
         // new Isometric(),
-        new Perspective(10, 600, -1, 1),
+        new Perspective(1, 2, 4/3, 600),
         new CamScreen(0, 0, 300, 200));
     camera.m.rotate(basis.k, radians(180));
     camera.update_inv();
