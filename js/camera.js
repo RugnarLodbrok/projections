@@ -89,7 +89,7 @@ class CamScreen {
         this.h = h;
         this.m = Matrix.translation(new Vector3(x, y));
         this.m.data[0][0] = this.w / 2;
-        this.m.data[1][1] = this.h / 2;
+        this.m.data[1][1] = -this.h / 2;
         this.m.translate(new Vector3(w / 2, h / 2));
     }
 

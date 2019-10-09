@@ -19,6 +19,23 @@ class Mesh {
         return mesh;
     }
 
+    static tetrahedron(x, y, size) {
+        let mesh = new Mesh(x, y);
+        mesh.vertices.push(new Vector3(0, -size, -size / 2));
+        mesh.vertices.push(new Vector3(size, size / 2, -size / 2));
+        mesh.vertices.push(new Vector3(-size, size / 2, -size / 2));
+        mesh.vertices.push(new Vector3(0, 0, size));
+
+        mesh.add_edge(0, 1);
+        mesh.add_edge(0, 2);
+        mesh.add_edge(0, 3);
+        mesh.add_edge(1, 2);
+        mesh.add_edge(1, 3);
+        mesh.add_edge(2, 3);
+
+        return mesh;
+    }
+
     static cube(x, y, size) {
         let mesh = new Mesh(x, y);
         mesh.vertices.push(new Vector3(-size, -size, -size));
