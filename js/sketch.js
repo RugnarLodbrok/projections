@@ -2,7 +2,8 @@ class Mesh {
     constructor(x, y) {
         this.m = Matrix.identity(4);
         this.vertices = [];
-        this.edges = [];
+        this._edges = [];
+        this.faces = [];
         this.m.translate(new Vector3(x, y, 0));
     }
 
@@ -26,12 +27,18 @@ class Mesh {
         mesh.vertices.push(new Vector3(-size, size / 2, -size / 2));
         mesh.vertices.push(new Vector3(0, 0, size));
 
-        mesh.add_edge(0, 1);
-        mesh.add_edge(0, 2);
-        mesh.add_edge(0, 3);
-        mesh.add_edge(1, 2);
-        mesh.add_edge(1, 3);
-        mesh.add_edge(2, 3);
+        // mesh.add_edge(0, 1);
+        // mesh.add_edge(0, 2);
+        // mesh.add_edge(0, 3);
+        // mesh.add_edge(1, 2);
+        // mesh.add_edge(1, 3);
+        // mesh.add_edge(2, 3);
+
+        mesh.add_face(0, 1, 2);
+        mesh.add_face(0, 1, 3);
+        mesh.add_face(0, 2, 3);
+        mesh.add_face(1, 2, 3);
+
 
         return mesh;
     }
@@ -65,13 +72,25 @@ class Mesh {
     }
 
     add_edge(i, j) {
-        this.edges.push([i, j]);
+        this._edges.push([i, j]);
+    }
+
+    add_face(p1, p2, p3) {
+        this.faces.push([p1, p2, p3]);
+    }
+
+    *edges() {
+        for (let f of this.faces) {
+            yield [f[0], f[1]];
+            yield [f[1], f[2]];
+            yield [f[2], f[0]];
+        }
     }
 
     draw(sketch) {
         sketch.stroke(0);
         sketch.strokeWeight(2);
-        for (let edge of this.edges) {
+        for (let edge of this.edges()) {
             let p1 = this.vertices[edge[0]].copy();
             let p2 = this.vertices[edge[1]].copy();
             p1.transform(this.m);

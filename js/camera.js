@@ -73,12 +73,18 @@ class Camera {
         sketch.strokeWeight(1);
         sketch.stroke(0, 200, 0);
         let m = mat_mul(basis_swap_yz, this.m_inv, mesh.m); // from world to camera coords
-        for (let edge of mesh.edges) {
-            let v1 = mesh.vertices[edge[0]].transformed(m);
-            let v2 = mesh.vertices[edge[1]].transformed(m);
+        for (let face of mesh.faces) {
+            let v1 = mesh.vertices[face[0]].transformed(m);
+            let v2 = mesh.vertices[face[1]].transformed(m);
+            let v3 = mesh.vertices[face[2]].transformed(m);
             this.projection.proj_vertex(v1);
             this.projection.proj_vertex(v2);
-            s.line(sketch, v1, v2);
+            this.projection.proj_vertex(v3);
+            if (v1.minus(v2).cross(v2.minus(v3)).z < 0)
+                continue;
+            for (let edge of [[v1, v2], [v2, v3], [v3, v1]]) {
+                s.line(sketch, edge[0], edge[1]);
+            }
         }
     }
 }
@@ -102,7 +108,7 @@ class CamScreen {
         sketch.strokeWeight(0);
         sketch.fill(0);
         sketch.beginShape();
-        for (let p of points){
+        for (let p of points) {
             p.transform(this.m);
             sketch.vertex(p.x, p.y);
         }

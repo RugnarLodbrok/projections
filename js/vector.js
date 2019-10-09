@@ -48,6 +48,17 @@ class Vector3 {
         return r;
     }
 
+    minus(other) {
+        return new Vector3(this.x - other.x, this.y - other.y, this.z - other.z);
+    }
+
+    cross(other) {
+        return new Vector3(
+            this.y * other.z - other.y * this.z,
+            this.z * other.x - other.z * this.x,
+            this.x * other.y - other.x * this.y);
+    }
+
     copy() {
         return new Vector3(this.x, this.y, this.z);
     }
