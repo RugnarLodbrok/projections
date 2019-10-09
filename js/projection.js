@@ -11,6 +11,8 @@ class Isometric {
     }
 }
 
+// http://www.songho.ca/opengl/gl_projectionmatrix.html
+// http://www.songho.ca/opengl/gl_transform.html
 class Perspective extends Isometric {
     constructor(n, w, h, f) {
         super();
