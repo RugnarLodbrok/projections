@@ -50,6 +50,7 @@ class Camera {
     }
 
     draw_projection(sketch, mesh) {
+        sketch.push();
         sketch.drawingContext.setLineDash([5, 5]);
         sketch.strokeWeight(.3);
         sketch.stroke(0, 0, 200);
@@ -63,7 +64,7 @@ class Camera {
             p.transform(this.m); // draw projected vertices on the screen
             sketch.line(v.x, v.y, p.x, p.y);
         }
-        sketch.drawingContext.setLineDash([]);
+        sketch.pop();
     }
 
     draw_on_screen(sketch, mesh) {
@@ -93,21 +94,18 @@ class CamScreen {
     }
 
     draw(sketch) {
-        let p1 = new Vector3(-1, -1);
-        let p2 = new Vector3(1, -1);
-        let p3 = new Vector3(1, 1);
-        let p4 = new Vector3(-1, 1);
-        p1.transform(this.m);
-        p2.transform(this.m);
-        p3.transform(this.m);
-        p4.transform(this.m);
+        let points = [];
+        points.push(new Vector3(-1, -1));
+        points.push(new Vector3(1, -1));
+        points.push(new Vector3(1, 1));
+        points.push(new Vector3(-1, 1));
         sketch.strokeWeight(0);
         sketch.fill(0);
         sketch.beginShape();
-        sketch.vertex(p1.x, p1.y);
-        sketch.vertex(p2.x, p2.y);
-        sketch.vertex(p3.x, p3.y);
-        sketch.vertex(p4.x, p4.y);
+        for (let p of points){
+            p.transform(this.m);
+            sketch.vertex(p.x, p.y);
+        }
         sketch.endShape(sketch.CLOSE);
     }
 
