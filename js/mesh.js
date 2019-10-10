@@ -187,22 +187,47 @@ class Mesh {
         if (tessellation === undefined)
             tessellation = 0;
         let radius = this.vertices[0].length();
-        if (tessellation <= 0 || indices.length !== 3)
+        if (tessellation <= 0 || (indices.length !== 3 && indices.length !== 4))
             return this.faces.push(indices);
-        let a = indices[0];
-        let b = indices[1];
-        let c = indices[2];
-        let ab = this.vertices.push(this.vertices[a].plus(this.vertices[b])) - 1;
-        let bc = this.vertices.push(this.vertices[b].plus(this.vertices[c])) - 1;
-        let ca = this.vertices.push(this.vertices[c].plus(this.vertices[a])) - 1;
-        for (let i of [ab, bc, ca]) {
-            this.vertices[i].normalize();
-            this.vertices[i].scale(radius);
+        if (indices.length === 3) {
+            let a = indices[0];
+            let b = indices[1];
+            let c = indices[2];
+            let ab = this.vertices.push(this.vertices[a].plus(this.vertices[b])) - 1;
+            let bc = this.vertices.push(this.vertices[b].plus(this.vertices[c])) - 1;
+            let ca = this.vertices.push(this.vertices[c].plus(this.vertices[a])) - 1;
+            for (let i of [ab, bc, ca]) {
+                this.vertices[i].normalize();
+                this.vertices[i].scale(radius);
+            }
+            this.add_face([a, ab, ca], tessellation - 1);
+            this.add_face([ab, b, bc], tessellation - 1);
+            this.add_face([ca, bc, c], tessellation - 1);
+            this.add_face([ab, bc, ca], tessellation - 1);
+        } else if (indices.length === 4) {
+            let a = indices[0];
+            let b = indices[1];
+            let c = indices[2];
+            let d = indices[3];
+            let ab = this.vertices.push(this.vertices[a].plus(this.vertices[b])) - 1;
+            let bc = this.vertices.push(this.vertices[b].plus(this.vertices[c])) - 1;
+            let cd = this.vertices.push(this.vertices[c].plus(this.vertices[d])) - 1;
+            let da = this.vertices.push(this.vertices[d].plus(this.vertices[a])) - 1;
+            let e = this.vertices.push(
+                this.vertices[a]
+                    .plus(this.vertices[b])
+                    .plus(this.vertices[c])
+                    .plus(this.vertices[d])
+            ) - 1;
+            for (let i of [ab, bc, cd, da, e]) {
+                this.vertices[i].normalize();
+                this.vertices[i].scale(radius);
+            }
+            this.add_face([a, ab, e, da], tessellation - 1);
+            this.add_face([ab, b, bc, e], tessellation - 1);
+            this.add_face([e, bc, c, cd], tessellation - 1);
+            this.add_face([da, e, cd, d], tessellation - 1);
         }
-        this.add_face([a, ab, ca], tessellation - 1);
-        this.add_face([ab, b, bc], tessellation - 1);
-        this.add_face([ca, bc, c], tessellation - 1);
-        this.add_face([ab, bc, ca], tessellation - 1);
     }
 
     * edges() {

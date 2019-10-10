@@ -15,7 +15,7 @@ function p5_func(sketch) {
             new CamScreen(0, 0, screen_w, screen_w / aspect));
         camera.m.rotate(basis.k, radians(180));
         camera.update_inv();
-        mesh = Mesh.dodecahedron(500, 400, 25);
+        mesh = Mesh.cube(500, 400, 25, 1);
     };
     sketch.draw = () => {
         if (sketch.keyIsDown(W)) {
