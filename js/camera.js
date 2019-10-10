@@ -89,7 +89,7 @@ class Camera {
             let v1 = vertices[face[0]];
             let v2 = vertices[face[1]];
             let v3 = vertices[face[2]];
-            let backface = (v1.minus(v2).cross(v2.minus(v3)).z < 0);
+            let backface = (v1.minus(v2).cross(v2.minus(v3)).z > 0); // because projection gives left-handed basis
             if (backface) {
                 sketch.strokeWeight(.5);
                 edges_set = back_edges;

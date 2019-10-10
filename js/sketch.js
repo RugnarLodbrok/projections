@@ -6,6 +6,11 @@ class Mesh {
         this.m.translate(new Vector3(x, y, 0));
     }
 
+    scale(c) {
+        for (let v of this.vertices)
+            v.scale(c);
+    }
+
     static square(x, y, size) {
         let mesh = new Mesh(x, y);
         mesh.vertices.push(new Vector3(-size, -size, 0));
@@ -22,12 +27,85 @@ class Mesh {
         mesh.vertices.push(new Vector3(-Math.sqrt(2 / 9), Math.sqrt(2 / 3), -1 / 3));
         mesh.vertices.push(new Vector3(-Math.sqrt(2 / 9), -Math.sqrt(2 / 3), -1 / 3));
         mesh.vertices.push(new Vector3(0, 0, 1));
-        for (let v of mesh.vertices)
-            v.scale(size);
-        mesh.add_face(0, 1, 2);
-        mesh.add_face(0, 3, 1);
-        mesh.add_face(0, 2, 3);
-        mesh.add_face(1, 3, 2);
+        mesh.scale(size);
+
+        mesh.add_face(1, 0, 2);
+        mesh.add_face(3, 0, 1);
+        mesh.add_face(2, 0, 3);
+        mesh.add_face(3, 1, 2);
+
+        return mesh;
+    }
+
+    static octahedron(x, y, size) {
+        let mesh = new Mesh(x, y);
+        mesh.vertices.push(new Vector3(0, 0, -1));
+        mesh.vertices.push(new Vector3(0, 0, 1));
+        mesh.vertices.push(new Vector3(0, -1, 0));
+        mesh.vertices.push(new Vector3(0, 1, 0));
+        mesh.vertices.push(new Vector3(-1, 0, 0));
+        mesh.vertices.push(new Vector3(1, 0, 0));
+        mesh.scale(size);
+
+        mesh.add_face(2, 0, 5);
+        mesh.add_face(5, 0, 3);
+        mesh.add_face(3, 0, 4);
+        mesh.add_face(4, 0, 2);
+        mesh.add_face(1, 2, 5);
+        mesh.add_face(1, 5, 3);
+        mesh.add_face(1, 3, 4);
+        mesh.add_face(1, 4, 2);
+
+        return mesh;
+    }
+
+    static icosahedron(x, y, size) {
+        let mesh = new Mesh(x, y);
+        let t = (1.0 + Math.sqrt(5.0)) / 2.0;
+
+        mesh.vertices.push(new Vector3(-1, t, 0));
+        mesh.vertices.push(new Vector3(1, t, 0));
+        mesh.vertices.push(new Vector3(-1, -t, 0));
+        mesh.vertices.push(new Vector3(1, -t, 0));
+
+        mesh.vertices.push(new Vector3(0, -1, t));
+        mesh.vertices.push(new Vector3(0, 1, t));
+        mesh.vertices.push(new Vector3(0, -1, -t));
+        mesh.vertices.push(new Vector3(0, 1, -t));
+
+        mesh.vertices.push(new Vector3(t, 0, -1));
+        mesh.vertices.push(new Vector3(t, 0, 1));
+        mesh.vertices.push(new Vector3(-t, 0, -1));
+        mesh.vertices.push(new Vector3(-t, 0, 1));
+        mesh.scale(size);
+
+        // 5 faces around point 0
+        mesh.add_face(0, 11, 5);
+        mesh.add_face(0, 5, 1);
+        mesh.add_face(0, 1, 7);
+        mesh.add_face(0, 7, 10);
+        mesh.add_face(0, 10, 11);
+
+        // 5 adjacent faces
+        mesh.add_face(1, 5, 9);
+        mesh.add_face(5, 11, 4);
+        mesh.add_face(11, 10, 2);
+        mesh.add_face(10, 7, 6);
+        mesh.add_face(7, 1, 8);
+
+        // 5 faces around point 3
+        mesh.add_face(3, 9, 4);
+        mesh.add_face(3, 4, 2);
+        mesh.add_face(3, 2, 6);
+        mesh.add_face(3, 6, 8);
+        mesh.add_face(3, 8, 9);
+
+        // 5 adjacent faces
+        mesh.add_face(4, 9, 5);
+        mesh.add_face(2, 4, 11);
+        mesh.add_face(6, 2, 10);
+        mesh.add_face(8, 6, 7);
+        mesh.add_face(9, 8, 1);
 
         return mesh;
     }
@@ -42,15 +120,14 @@ class Mesh {
         mesh.vertices.push(new Vector3(1, -1, 1));
         mesh.vertices.push(new Vector3(1, 1, 1));
         mesh.vertices.push(new Vector3(-1, 1, 1));
-        for (let v of mesh.vertices)
-            v.scale(size);
+        mesh.scale(size);
 
-        mesh.add_face(0, 1, 2, 3);
-        mesh.add_face(7, 6, 5, 4);
-        mesh.add_face(0, 4, 5, 1);
-        mesh.add_face(1, 5, 6, 2);
-        mesh.add_face(3, 7, 4, 0);
-        mesh.add_face(3, 2, 6, 7);
+        mesh.add_face(3, 2, 1, 0);
+        mesh.add_face(4, 5, 6, 7);
+        mesh.add_face(1, 5, 4, 0);
+        mesh.add_face(2, 6, 5, 1);
+        mesh.add_face(0, 4, 7, 3);
+        mesh.add_face(7, 6, 2, 3);
 
         return mesh;
     }
@@ -98,13 +175,13 @@ function p5_func(sketch) {
         const fov = 80;
         let w = 2 * near_plane * Math.tan(radians(fov / 2));
         sketch.createCanvas(800, 600);
-        camera = new Camera(500, 480,
+        camera = new Camera(500, 500,
             // new Isometric(screen_w, screen_w/aspect),
             new Perspective(near_plane, w, w / aspect, 600),
             new CamScreen(0, 0, screen_w, screen_w / aspect));
         camera.m.rotate(basis.k, radians(180));
         camera.update_inv();
-        mesh = Mesh.cube(500, 400, 25);
+        mesh = Mesh.icosahedron(500, 400, 25);
     };
     sketch.draw = () => {
         if (sketch.keyIsDown(W)) {
