@@ -83,7 +83,6 @@ class Camera {
 
         s.draw(sketch);
         sketch.push();
-        sketch.strokeWeight(1);
         sketch.stroke(0, 200, 0);
 
         for (let face of mesh.faces) {
@@ -92,11 +91,11 @@ class Camera {
             let v3 = vertices[face[2]];
             let backface = (v1.minus(v2).cross(v2.minus(v3)).z < 0);
             if (backface) {
-                sketch.drawingContext.setLineDash([1, 10]);
+                sketch.strokeWeight(.5);
                 edges_set = back_edges;
             } else {
+                sketch.strokeWeight(2);
                 edges_set = front_edges;
-                sketch.drawingContext.setLineDash([]);
             }
             let len = face.length;
             for (let k = 0; k < len; ++k) {

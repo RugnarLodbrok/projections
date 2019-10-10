@@ -18,11 +18,12 @@ class Mesh {
 
     static tetrahedron(x, y, size) {
         let mesh = new Mesh(x, y);
-        mesh.vertices.push(new Vector3(0, -size, -size / 2));
-        mesh.vertices.push(new Vector3(size, size / 2, -size / 2));
-        mesh.vertices.push(new Vector3(-size, size / 2, -size / 2));
-        mesh.vertices.push(new Vector3(0, 0, size));
-
+        mesh.vertices.push(new Vector3(Math.sqrt(8 / 9), 0, -1 / 3));
+        mesh.vertices.push(new Vector3(-Math.sqrt(2 / 9), Math.sqrt(2 / 3), -1 / 3));
+        mesh.vertices.push(new Vector3(-Math.sqrt(2 / 9), -Math.sqrt(2 / 3), -1 / 3));
+        mesh.vertices.push(new Vector3(0, 0, 1));
+        for (let v of mesh.vertices)
+            v.scale(size);
         mesh.add_face(0, 1, 2);
         mesh.add_face(0, 3, 1);
         mesh.add_face(0, 2, 3);
@@ -33,14 +34,16 @@ class Mesh {
 
     static cube(x, y, size) {
         let mesh = new Mesh(x, y);
-        mesh.vertices.push(new Vector3(-size, -size, -size));
-        mesh.vertices.push(new Vector3(size, -size, -size));
-        mesh.vertices.push(new Vector3(size, size, -size));
-        mesh.vertices.push(new Vector3(-size, size, -size));
-        mesh.vertices.push(new Vector3(-size, -size, size));
-        mesh.vertices.push(new Vector3(size, -size, size));
-        mesh.vertices.push(new Vector3(size, size, size));
-        mesh.vertices.push(new Vector3(-size, size, size));
+        mesh.vertices.push(new Vector3(-1, -1, -1));
+        mesh.vertices.push(new Vector3(1, -1, -1));
+        mesh.vertices.push(new Vector3(1, 1, -1));
+        mesh.vertices.push(new Vector3(-1, 1, -1));
+        mesh.vertices.push(new Vector3(-1, -1, 1));
+        mesh.vertices.push(new Vector3(1, -1, 1));
+        mesh.vertices.push(new Vector3(1, 1, 1));
+        mesh.vertices.push(new Vector3(-1, 1, 1));
+        for (let v of mesh.vertices)
+            v.scale(size);
 
         mesh.add_face(0, 1, 2, 3);
         mesh.add_face(7, 6, 5, 4);
