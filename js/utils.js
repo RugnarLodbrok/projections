@@ -19,3 +19,23 @@ const Q = 81;
 const E = 69;
 
 //http://keycode.info/
+
+class PairSet {
+    constructor(max_value, commutative) {
+        this.max_value = max_value;
+        this.commutative = commutative;
+        this.set = new Set();
+    }
+
+    add(a, b) {
+        let set = this.set;
+        let n = this.max_value;
+        set.add(a + b * n);
+        if (this.commutative)
+            set.add(a * n + b)
+    }
+
+    has(a, b) {
+        return this.set.has(a + this.max_value * b);
+    }
+}

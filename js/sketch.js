@@ -2,7 +2,6 @@ class Mesh {
     constructor(x, y) {
         this.m = Matrix.identity(4);
         this.vertices = [];
-        this._edges = [];
         this.faces = [];
         this.m.translate(new Vector3(x, y, 0));
     }
@@ -13,10 +12,7 @@ class Mesh {
         mesh.vertices.push(new Vector3(size, -size, 0));
         mesh.vertices.push(new Vector3(size, size, 0));
         mesh.vertices.push(new Vector3(-size, size, 0));
-        mesh.add_edge(0, 1);
-        mesh.add_edge(1, 2);
-        mesh.add_edge(2, 3);
-        mesh.add_edge(3, 0);
+        mesh.add_face(0, 1, 2, 3);
         return mesh;
     }
 
@@ -27,18 +23,10 @@ class Mesh {
         mesh.vertices.push(new Vector3(-size, size / 2, -size / 2));
         mesh.vertices.push(new Vector3(0, 0, size));
 
-        // mesh.add_edge(0, 1);
-        // mesh.add_edge(0, 2);
-        // mesh.add_edge(0, 3);
-        // mesh.add_edge(1, 2);
-        // mesh.add_edge(1, 3);
-        // mesh.add_edge(2, 3);
-
         mesh.add_face(0, 1, 2);
-        mesh.add_face(0, 1, 3);
+        mesh.add_face(0, 3, 1);
         mesh.add_face(0, 2, 3);
-        mesh.add_face(1, 2, 3);
-
+        mesh.add_face(1, 3, 2);
 
         return mesh;
     }
@@ -53,37 +41,33 @@ class Mesh {
         mesh.vertices.push(new Vector3(size, -size, size));
         mesh.vertices.push(new Vector3(size, size, size));
         mesh.vertices.push(new Vector3(-size, size, size));
-        mesh.add_edge(0, 1);
-        mesh.add_edge(1, 2);
-        mesh.add_edge(2, 3);
-        mesh.add_edge(3, 0);
 
-        mesh.add_edge(4, 5);
-        mesh.add_edge(5, 6);
-        mesh.add_edge(6, 7);
-        mesh.add_edge(7, 4);
-
-        mesh.add_edge(0, 4);
-        mesh.add_edge(1, 5);
-        mesh.add_edge(2, 6);
-        mesh.add_edge(3, 7);
+        mesh.add_face(0, 1, 2, 3);
+        mesh.add_face(7, 6, 5, 4);
+        mesh.add_face(0, 4, 5, 1);
+        mesh.add_face(1, 5, 6, 2);
+        mesh.add_face(3, 7, 4, 0);
+        mesh.add_face(3, 2, 6, 7);
 
         return mesh;
     }
 
-    add_edge(i, j) {
-        this._edges.push([i, j]);
+    add_face() {
+        this.faces.push(arguments);
     }
 
-    add_face(p1, p2, p3) {
-        this.faces.push([p1, p2, p3]);
-    }
-
-    *edges() {
+    * edges() {
+        let edges = new PairSet(this.vertices.length, true);
         for (let f of this.faces) {
-            yield [f[0], f[1]];
-            yield [f[1], f[2]];
-            yield [f[2], f[0]];
+            let len = f.length;
+            for (let i = 0; i < len; ++i) {
+                let f1 = f[i];
+                let f2 = f[(i + 1) % len];
+                if (edges.has(f1, f2))
+                    continue;
+                edges.add(f1, f2);
+                yield [f1, f2];
+            }
         }
     }
 

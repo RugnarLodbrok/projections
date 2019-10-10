@@ -69,23 +69,46 @@ class Camera {
 
     draw_on_screen(sketch, mesh) {
         let s = this.screen;
+        let front_edges = new PairSet(mesh.vertices.length, true);
+        let back_edges = new PairSet(mesh.vertices.length, true);
+        let edges_set;
+
+        let m = mat_mul(basis_swap_yz, this.m_inv, mesh.m); // from world to camera coords
+        let vertices = [];
+        for (let v of mesh.vertices) {
+            v = v.transformed(m);
+            this.projection.proj_vertex(v);
+            vertices.push(v);
+        }
+
         s.draw(sketch);
+        sketch.push();
         sketch.strokeWeight(1);
         sketch.stroke(0, 200, 0);
-        let m = mat_mul(basis_swap_yz, this.m_inv, mesh.m); // from world to camera coords
+
         for (let face of mesh.faces) {
-            let v1 = mesh.vertices[face[0]].transformed(m);
-            let v2 = mesh.vertices[face[1]].transformed(m);
-            let v3 = mesh.vertices[face[2]].transformed(m);
-            this.projection.proj_vertex(v1);
-            this.projection.proj_vertex(v2);
-            this.projection.proj_vertex(v3);
-            if (v1.minus(v2).cross(v2.minus(v3)).z < 0)
-                continue;
-            for (let edge of [[v1, v2], [v2, v3], [v3, v1]]) {
-                s.line(sketch, edge[0], edge[1]);
+            let v1 = vertices[face[0]];
+            let v2 = vertices[face[1]];
+            let v3 = vertices[face[2]];
+            let backface = (v1.minus(v2).cross(v2.minus(v3)).z < 0);
+            if (backface) {
+                sketch.drawingContext.setLineDash([1, 10]);
+                edges_set = back_edges;
+            } else {
+                edges_set = front_edges;
+                sketch.drawingContext.setLineDash([]);
+            }
+            let len = face.length;
+            for (let k = 0; k < len; ++k) {
+                let i = face[k];
+                let j = face[(k + 1) % len];
+                if (edges_set.has(i, j))
+                    continue;
+                edges_set.add(i, j);
+                s.line(sketch, vertices[i], vertices[j]);
             }
         }
+        sketch.pop();
     }
 }
 
