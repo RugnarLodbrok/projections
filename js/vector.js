@@ -42,6 +42,10 @@ class Vector3 {
         this.z *= c;
     }
 
+    mul(c) {
+        return new Vector3(this.x * c, this.y * c, this.z * c);
+    }
+
     inverted() {
         let r = this.copy();
         r.scale(-1);
@@ -50,6 +54,10 @@ class Vector3 {
 
     minus(other) {
         return new Vector3(this.x - other.x, this.y - other.y, this.z - other.z);
+    }
+
+    plus(other) {
+        return new Vector3(this.x + other.x, this.y + other.y, this.z + other.z);
     }
 
     cross(other) {
