@@ -110,6 +110,52 @@ class Mesh {
         return mesh;
     }
 
+    static dodecahedron(x, y, size) {
+        let mesh = new Mesh(x, y);
+        let phi = (1 + Math.sqrt(5)) / 2;
+        mesh.vertices.push(new Vector3(-1, -1, -1));
+        mesh.vertices.push(new Vector3(1, -1, -1));
+        mesh.vertices.push(new Vector3(-1, 1, -1));
+        mesh.vertices.push(new Vector3(1, 1, -1));
+        mesh.vertices.push(new Vector3(-1, -1, 1));
+        mesh.vertices.push(new Vector3(1, -1, 1));
+        mesh.vertices.push(new Vector3(-1, 1, 1));
+        mesh.vertices.push(new Vector3(1, 1, 1));
+
+        mesh.vertices.push(new Vector3(0, -1 / phi, -phi));
+        mesh.vertices.push(new Vector3(0, -1 / phi, phi));
+        mesh.vertices.push(new Vector3(0, 1 / phi, -phi));
+        mesh.vertices.push(new Vector3(0, 1 / phi, phi));
+
+        mesh.vertices.push(new Vector3(-1 / phi, -phi, 0));
+        mesh.vertices.push(new Vector3(-1 / phi, phi, 0));
+        mesh.vertices.push(new Vector3(1 / phi, -phi, 0));
+        mesh.vertices.push(new Vector3(1 / phi, phi, 0));
+
+        mesh.vertices.push(new Vector3(-phi, 0, -1 / phi));
+        mesh.vertices.push(new Vector3(phi, 0, -1 / phi));
+        mesh.vertices.push(new Vector3(-phi, 0, 1 / phi));
+        mesh.vertices.push(new Vector3(phi, 0, 1 / phi));
+        mesh.scale(size);
+
+        mesh.add_face(15, 13, 6, 11, 7);
+        mesh.add_face(13, 15, 3, 10, 2);
+        mesh.add_face(14, 12, 0, 8, 1);
+        mesh.add_face(12, 14, 5, 9, 4);
+
+        mesh.add_face(18, 4, 9, 11, 6);
+        mesh.add_face(16, 2, 10, 8, 0);
+        mesh.add_face(11, 9, 5, 19, 7);
+        mesh.add_face(8, 10, 3, 17, 1);
+
+        mesh.add_face(16, 18, 6, 13, 2);
+        mesh.add_face(18, 16, 0, 12, 4);
+        mesh.add_face(17, 19, 5, 14, 1);
+        mesh.add_face(19, 17, 3, 15, 7);
+
+        return mesh;
+    }
+
     static cube(x, y, size) {
         let mesh = new Mesh(x, y);
         mesh.vertices.push(new Vector3(-1, -1, -1));
@@ -181,7 +227,7 @@ function p5_func(sketch) {
             new CamScreen(0, 0, screen_w, screen_w / aspect));
         camera.m.rotate(basis.k, radians(180));
         camera.update_inv();
-        mesh = Mesh.icosahedron(500, 400, 25);
+        mesh = Mesh.dodecahedron(500, 400, 25);
     };
     sketch.draw = () => {
         if (sketch.keyIsDown(W)) {
