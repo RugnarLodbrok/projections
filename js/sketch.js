@@ -28,6 +28,7 @@ class Mesh {
         mesh.vertices.push(new Vector3(-Math.sqrt(2 / 9), -Math.sqrt(2 / 3), -1 / 3));
         mesh.vertices.push(new Vector3(0, 0, 1));
         mesh.scale(size);
+        mesh.scale(1.6);
 
         mesh.add_face(1, 0, 2);
         mesh.add_face(3, 0, 1);
@@ -46,6 +47,7 @@ class Mesh {
         mesh.vertices.push(new Vector3(-1, 0, 0));
         mesh.vertices.push(new Vector3(1, 0, 0));
         mesh.scale(size);
+        mesh.scale(1.4);
 
         mesh.add_face(2, 0, 5);
         mesh.add_face(5, 0, 3);
@@ -78,6 +80,7 @@ class Mesh {
         mesh.vertices.push(new Vector3(-t, 0, -1));
         mesh.vertices.push(new Vector3(-t, 0, 1));
         mesh.scale(size);
+        mesh.scale(0.7);
 
         // 5 faces around point 0
         mesh.add_face(0, 11, 5);
@@ -137,6 +140,7 @@ class Mesh {
         mesh.vertices.push(new Vector3(-phi, 0, 1 / phi));
         mesh.vertices.push(new Vector3(phi, 0, 1 / phi));
         mesh.scale(size);
+        mesh.scale(0.7);
 
         mesh.add_face(15, 13, 6, 11, 7);
         mesh.add_face(13, 15, 3, 10, 2);
@@ -167,6 +171,7 @@ class Mesh {
         mesh.vertices.push(new Vector3(1, 1, 1));
         mesh.vertices.push(new Vector3(-1, 1, 1));
         mesh.scale(size);
+        mesh.scale(0.8);
 
         mesh.add_face(3, 2, 1, 0);
         mesh.add_face(4, 5, 6, 7);
