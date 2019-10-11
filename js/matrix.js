@@ -84,20 +84,16 @@ class Matrix {
                     throw "invert matrix error";
             }
             div_row(m, M[m][m]);
-            for (i = m + 1; i < rank; ++i) {
-                if (M[i][m] !== 0) {
+            for (i = m + 1; i < rank; ++i)
+                if (M[i][m] !== 0)
                     sub_row(i, m, M[i][m] / M[m][m])
-                }
-            }
         }
-        // at this point M is triangle matrix
+        // at this point M is a triangle matrix
         for (let m = rank - 1; m >= 0; --m) {
             div_row(m, M[m][m]);
-            for (i = 0; i < m; ++i) {
-                if (M[i][m] !== 0) {
+            for (i = 0; i < m; ++i)
+                if (M[i][m] !== 0)
                     sub_row(i, m, M[i][m] / M[m][m])
-                }
-            }
         }
         return r;
     }
