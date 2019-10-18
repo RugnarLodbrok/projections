@@ -1,8 +1,15 @@
+let ndc_matrix = new Matrix([
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 1],
+]);
+
 function isometric_matrix(w, h) {
     return new Matrix([
         [2 / w, 0, 0, 0],
         [0, 2 / h, 0, 0],
-        [0, 0, 0, 0],
+        [0, 0, 1, 0],
         [0, 0, 0, 1],
     ])
 }
@@ -22,7 +29,6 @@ function perspective_matrix(n, w, h, f) {
     return new Matrix([
         [2 * n / (r - l), 0, (r + l) / (r - l), 0],
         [0, 2 * n / (t - b), (t + b) / (t - b), 0],
-        [0, 0, 0, 0],
-        // [0, 0, -(f + n) / (f - n), -2 * f * n / (f - n)],
+        [0, 0, -(f + n) / (f - n), -2 * f * n / (f - n)],
         [0, 0, -1, 0]]);
 }

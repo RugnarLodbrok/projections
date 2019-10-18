@@ -1,7 +1,7 @@
 class Camera {
     constructor(x, y, projection, screen) {
         this.m = Matrix.identity(4);
-        this.projection = projection;
+        this.projection = projection.mul_left(ndc_matrix);
         this.m.translate(new Vector3(x, y, 0));
         this.m_inv = this.m.inverted();
         this.screen = screen;
