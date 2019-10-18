@@ -5,6 +5,13 @@ class Camera {
         this.m.translate(new Vector3(x, y, 0));
         this.m_inv = this.m.inverted();
         this.screen = screen;
+        this.world_to_screen_m = new Matrix([
+            [1, 0, 0, 0],
+            [0, 0, 1, 0],
+            [0, -1, 0, 0],
+            [0, 0, 0, 1],
+        ]);
+        this.screen_to_world_m = this.world_to_screen_m.inverted();
     }
 
     update_inv() {
@@ -17,13 +24,16 @@ class Camera {
     }
 
     draw_fov(sketch) {
+        if (!this.projection.data[3][2])
+            return;
         let p0 = new Vector3(0, 0);
-        let pl = new Vector3(this.projection.l, this.projection.n);
-        let pr = new Vector3(this.projection.r, this.projection.n);
+        let pl = new Vector3(-.5, this.projection.data[0][0] / 2);
+        let pr = new Vector3(.5, this.projection.data[0][0] / 2);
         for (let p of [p0, pl, pr]) {
             p.scale(this.screen.w);
             p.transform(this.m);
         }
+        // console.log("fov:", p0.x, p0.y, pl.x, pl.y);
         sketch.line(p0.x, p0.y, pl.x, pl.y);
         sketch.line(p0.x, p0.y, pr.x, pr.y);
     }
@@ -57,10 +67,10 @@ class Camera {
         for (let v of mesh.vertices) {
             v = v.transformed(mesh.m);
             let p = v.transformed(this.m_inv); // now we have p relative to the screen, in other words p contains screen coordinates
-            p.transform(basis_swap_yz);
-            this.projection.proj_vertex(p); // project along z
+            p.transform(this.world_to_screen_m);
+            p.transform4(this.projection);
             p.x *= this.screen.w / 2;
-            p.transform(basis_swap_yz);
+            p.transform(this.screen_to_world_m);
             p.transform(this.m); // draw projected vertices on the screen
             sketch.line(v.x, v.y, p.x, p.y);
         }
@@ -73,11 +83,11 @@ class Camera {
         let back_edges = new PairSet(mesh.vertices.length, true);
         let edges_set;
 
-        let m = mat_mul(basis_swap_yz, this.m_inv, mesh.m); // from world to camera coords
+        let m = mat_mul(this.world_to_screen_m, this.m_inv, mesh.m); // from world to camera coords
         let vertices = [];
         for (let v of mesh.vertices) {
             v = v.transformed(m);
-            this.projection.proj_vertex(v);
+            v.transform4(this.projection);
             vertices.push(v);
         }
 
@@ -89,7 +99,7 @@ class Camera {
             let v1 = vertices[face[0]];
             let v2 = vertices[face[1]];
             let v3 = vertices[face[2]];
-            let backface = (v1.minus(v2).cross(v2.minus(v3)).z > 0); // because projection gives left-handed basis
+            let backface = (v1.minus(v2).cross(v2.minus(v3)).z < 0);
             if (backface) {
                 sketch.strokeWeight(.5);
                 edges_set = back_edges;
@@ -116,8 +126,9 @@ class CamScreen {
         this.w = w;
         this.h = h;
         this.m = Matrix.translation(new Vector3(x, y));
-        this.m.data[0][0] = this.w / 2;
+        this.m.data[0][0] = -this.w / 2;
         this.m.data[1][1] = -this.h / 2;
+        // invert because like human's eye, projection matrix flips both axis
         this.m.translate(new Vector3(w / 2, h / 2));
     }
 

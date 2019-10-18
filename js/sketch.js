@@ -10,12 +10,12 @@ function p5_func(sketch) {
         let w = 2 * near_plane * Math.tan(radians(fov / 2));
         sketch.createCanvas(800, 600);
         camera = new Camera(500, 500,
-            // new Isometric(screen_w, screen_w/aspect),
-            new Perspective(near_plane, w, w / aspect, 600),
+            // isometric_matrix(screen_w, screen_w/aspect),
+            perspective_matrix(near_plane, w, w / aspect, 600),
             new CamScreen(0, 0, screen_w, screen_w / aspect));
         camera.m.rotate(basis.k, radians(180));
         camera.update_inv();
-        mesh = Mesh.cube(500, 400, 25, 1);
+        mesh = Mesh.tetrahedron(500, 400, 25, 0);
     };
     sketch.draw = () => {
         if (sketch.keyIsDown(W)) {
